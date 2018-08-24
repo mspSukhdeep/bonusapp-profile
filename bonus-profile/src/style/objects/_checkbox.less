@@ -1,0 +1,23 @@
+.chkbox{
+    width: 14px;
+    height: 14px;
+    border: 1px solid @color-grey;
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+
+    border-color: @color-green;
+    &:after{
+        width: 14px;
+        height: 14px;
+        color: @color-green;
+        content: '\2713';
+        position: absolute;
+        top:0;
+        left: 0;
+        font-size: 20px;
+    }
+    &--actv{
+        border-color: @color-green;
+    }
+}

@@ -1,0 +1,82 @@
+.sctn{
+    border-bottom: 1px solid @border-color;
+    background-color: @color-white;
+    &__ttl{
+        font-size: @font-size-2xl;
+    }
+    &__inr{
+        padding: 20px;
+    }
+    &__body{
+        color: @fg-color-light;
+        line-height: 20px;
+        margin-top: 10px;
+        font-size: @font-size-xs;
+
+        max-height: 82px;
+        overflow: hidden;  
+        transition: .25s ease-in-out;
+        
+        &--expnd{
+            max-height: 200px;
+        }  
+    }
+    &__more{
+        float: right;
+        margin-top: 8px;
+        color: @color-blue;
+        font-size: @font-size-xs;
+        cursor: pointer;
+
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+    &__item{
+        &-ttl{
+            font-weight: @semi-bold;
+            color:@fg-color;
+        }
+        &-txt{
+            font-size: @font-size-xs;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        & + &{
+            margin-top: 20px;
+        }
+        &-wrpr{
+            &__ttl{
+                font-size: @font-size-2xl;
+                font-weight: @semi-bold;
+                color: @fg-color;
+                margin-bottom: 20px;
+            }
+        }
+    }
+    &__lnk{
+        float: left;
+        width:33.3%;
+        box-sizing: border-box;
+        &:nth-child(n+4){
+            margin-top: 20px;
+        }
+        &:before{
+            float: left;
+            clear: both;
+            margin-right: 14px;
+            font-size: 1.3em;
+            line-height: 1;
+            color: @border-color;
+            content: '\2022';
+        }
+        &-ttl{
+            font-size: @font-size-2xl;
+            font-weight: @semi-bold;
+            margin-bottom: 30px;
+        }
+        &-wrpr{
+            padding-bottom: 5px;
+        }
+    }
+}
