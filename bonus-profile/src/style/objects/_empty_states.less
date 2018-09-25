@@ -1,0 +1,129 @@
+.empty {
+  &-wrpr {
+    text-align: center;
+    width: 490px;
+    margin: 0 auto;
+    padding-top: 80px;
+  }
+  &-anim {
+    border-radius: 50%;
+    background-color: #e6ecf0;
+    width: 128px;
+    height: 128px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    &--exprd{
+        .empty-anim__1{
+            .absolute-center();
+            width: 58px;
+            z-index: 1;
+        }
+        .empty-anim__3{
+            display: none;
+        }
+        .bee{
+            position: absolute;
+            left: 15px;
+            top: 60px;
+            animation: bee-xAxis 5s infinite cubic-bezier(0.3, 0.27, 0.07, 1.64);
+        }
+        .bee:after{
+            content: '';
+            width: 10px;
+            height: 6px;
+            .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/bee.png', 10px);
+            display: block;
+            animation: bee-yAxis 5s infinite cubic-bezier(0.02, 0.01, 0.21, 1);
+
+        }
+    }
+    &--rdm{
+        .empty-anim__1{
+            position: absolute;
+            width: 158px;
+            left: -16px;
+            bottom: 28px;
+        }
+        .empty-anim__2{
+            position: absolute;
+            height: 40px;
+            bottom: 52px;
+            left: -50px;
+            animation: left-to-right 3s linear infinite;
+        }
+        .empty-anim__3{
+            position: absolute;
+            border-top:1px dashed #a5aeb8;
+            height: 1px;
+            width: 500px;
+            top: 74px;
+            right: 0;
+            animation: left-to-right 3s linear infinite;
+        }
+        .empty-anim__4{
+            position: absolute;
+            border-top:1px dashed #a5aeb8;
+            height: 1px;
+            width: 500px;
+            left: 0;
+            top: 93px;
+            animation: right-to-left 3s linear infinite;
+        }
+
+    }
+    &--psbk {
+      .empty-anim__1 {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 60px;
+      }
+      .empty-anim__2 {
+        position: absolute;
+        top: 64px;
+        left: 73px;
+        width: 25px;
+        z-index: 1;
+      }
+      .empty-anim__3 {
+        background-color: @color-white;
+        width: 3px;
+        height: 4px;
+        position: absolute;
+        left: 88px;
+        top: 70px;
+        z-index: 2;
+        animation: blink 1s ease infinite;
+      }
+    }
+  }
+  &-ttl {
+    color: @color-grey-2;
+    font-size: @font-size-3xl;
+    font-weight: @light;
+    margin-top: 30px;
+  }
+  &-txt {
+    color: @color-grey;
+    font-size: @font-size;
+    line-height: 23px;
+    margin-top: 10px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+
+    .empty{
+        &-wrpr{
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: @color-white;
+        }
+    }
+}

@@ -1,0 +1,82 @@
+.prfl{
+    &-edit{
+        background: @bg-color-light;
+        padding: 0 20px 20px 20px;
+        border-radius: 3px;
+        &__inr {
+          width: 300px;
+        }
+      
+        &__ttl {
+          font-size: @font-size-2xl;
+          font-weight: @semi-bold;
+          margin: 20px 0 20px 0;
+        }
+        &__form {
+          position: relative;
+          &-info {
+            font-size: 13px;
+            margin-top: 20px;
+            color: @color-grey-dark;
+          }
+        }
+        &__btn {
+          &-wrpr {
+            margin-top: 30px;
+          }
+        }
+    }
+}
+
+.inpt-ldr{
+    position: absolute;
+    right: 5px;
+    top: 40px;
+    width: 20px;
+    height: 20px;
+    background: url(https://assets.mspcdn.net/bonus_in/icon/loader_green.svg) no-repeat center center / 100%;
+}
+
+.inpt-link {
+  color: @color-blue;
+  font-size: @font-size-xs;
+  position: absolute;
+  right: 5px;
+  top: 40px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.inpt-status{
+    position: absolute;
+    left: 320px;
+    width: 200px;
+    font-size: 12px;
+    .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/tick.png', 20px);
+    background-size: 20px auto;
+    padding-left: 27px;
+    background-position: left center;
+    top: 30px;
+}
+
+
+@media screen and (max-width: @breakpoint){
+  .prfl{
+    margin: 0;
+      &-edit{
+          background-color: @color-white;
+          &__inr{
+              width: 100%;
+          }
+          .inpt-status{
+                  left: 0;
+                  position: static;
+                  margin-top: 10px;
+                  width: 300px;
+          }
+      }
+  }
+}

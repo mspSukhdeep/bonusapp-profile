@@ -5,7 +5,7 @@
     outline: none;
     color: @fg-color;
     background: none;
-
+    
     &-lbl {
         font-size: 0.85em;
         font-weight: @semi-bold;
@@ -20,7 +20,7 @@
 
     &-err {
         position: absolute;
-        top: 66px;
+        top: 67px;
         color: #d50000;
         background: url(http://assets.mspcdn.net/f_auto/bonus_in/icon/alert.png) no-repeat center right / 13px;
         width: 100%;
@@ -33,6 +33,17 @@
         border-top:1px solid transparent;
         border-bottom: 1px solid @border-color;
         transition: 0.2s ease-in-out;
+        &--msg{
+            position: relative;
+        }
+        &--dsbld{
+            .inpt{
+                color: @color-grey-dark;
+            }
+        }
+        &--fl{
+            border-bottom: 0;
+        }
         &--err{
             border-bottom-color: #d50000;
         }
@@ -42,8 +53,25 @@
                 color: @color-green;
                 font-weight: @semi-bold;
             }
-            border-top:none;
+            border-top:1px solid transparent;
+            top: -1px;
             border-bottom: 2px solid @color-green;
+        }
+    }
+}
+
+
+.vdp-datepicker__calendar{
+    width: 250px;
+    .cell{
+        height: 32px;
+        line-height: 32px;
+        font-size: @font-size-xs;
+        &:not(.blank):not(.disabled).day:hover{
+            border-color: @color-green;
+        }
+        &.selected{
+            background: @color-green;
         }
     }
 }

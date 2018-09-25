@@ -1,52 +1,89 @@
 <template>
-<div class="sctn prfl clearfix">
-    <div class="prfl__inr">
-        <div class="usr-wdgt clearfix">
-            <div class="usr-wdgt__img-wrpr">
-                <img class="usr-wdgt__img" src="https://graph.facebook.com/1208059782540876/picture?type=square&height=300" onerror="this.onerror=null;this.src='https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png';">
-            </div>
-            <div class="usr-wdgt__info">
-                <div class="usr-wdgt__name">Sukhdeep Singh
-                    <span class="bdg--pro">PRO</span>
-                </div>
-                <div class="usr-wdgt__eml">sukhdeep902@gmail.com
-                    <span class="unvrfd"></span>
-                </div>
-                <div class="usr-wdgt__mob">7673946555
-                </div>
-            </div>
-        </div>
-        <div class="prfl__rght">
-            <div class="prfl-cb">
-                <div class="prfl-cb__lft">
-                    <div class="prfl-cb__lft-txt">
-                        Cashback
+    <div class="prfl__wrpr">
+        <div class="sctn prfl clearfix">
+            <div class="prfl__inr clearfix">
+                <div class="usr-wdgt clearfix">
+                    <div class="usr-wdgt__img-wrpr">
+                        <img class="usr-wdgt__img" :src="profile.image" onerror="this.onerror=null;this.src='https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png';">
+                          <span class="icn-bsns" @click="showNotification=!showNotification" v-if="profile.user_status==='business'">Business User</span>
                     </div>
-                    <div class="prfl-cb__lft-amt">
-                        81
+                    <div class="usr-wdgt__info">
+                        <div class="usr-wdgt__name">{{profile.name || "Hi User!"}}
+                            <span class="bdg--pro" v-if="false">PRO</span>
+                        </div>
+                        <div class="usr-wdgt__eml">{{profile.email}}
+                            <span class="unvrfd" v-if="false"></span>
+                        </div>
+                        <div class="usr-wdgt__mob" v-if="profile.mobile">
+                            <span class="icn-mob"></span> {{profile.mobile}}
+                        </div>
                     </div>
                 </div>
-                <div class="prfl-cb__rght">
-                    <div class="prfl-cb__rght-pndng">
-                        Pending: <span class="txt--bold">₹52</span>
-                    </div>
-                    <div class="prfl-cb__rght-cnfrmd">
-                        Confirmed: <span class="txt--bold">₹29</span>
-                    </div>
+                <div class="prfl__rght">
+                    <cashback-widget></cashback-widget>
                 </div>
             </div>
-            <button class="btn btn--s ripple prfl__btn-rdm">
-                Redeem Cashback
-            </button>
+
+        <div class="prfl__ntfctn prfl__ntfctn--expnd" :class="{'':notificationExpanded}" v-if="profile.user_status==='business' && showNotification">
+            This account is now labeled as <strong>Business Account</strong>. The following stores are not eligible for Bonusapp cashback due to respective store policy towards bulk transactions:
+            <div class="prfl__ntfctn-sctn">
+              <span class="prfl__ntfctn-item">
+                {{bulkStores.join(", ")}}
+              </span>
+            </div>
+            <div class="prfl__ntfctn-btn-wrpr">
+              <div class="btn btn--s prfl__ntfctn-btn" @click="userAgree">
+                I understand
+              </div>
+            </div>
+            <div class="prfl__ntfctn-more" v-if="!notificationExpanded">
+              <span class="prfl__ntfctn-more-txt" @click="notificationExpanded = true">
+                Read More
+              </span>
+              
+            </div>
         </div>
         </div>
     </div>
-</div>    
 </template>
 
+
 <script>
+import CashbackWidget from "./CashbackWidget";
+
 export default {
-  name: 'ProfileHead',
+  name: "ProfileHead",
+  components: {
+    CashbackWidget
+  },
+  computed: {
+    profile() {
+      return this.$store.state.profile;
+    }
+  },
+  data: function() {
+    return {
+      bulkStores: [
+        "Amazon",
+        "Flipkart",
+        "Koovs",
+        "AJIO",
+        "LimeRoad",
+        "MyVishal",
+        "Reliance Trends",
+        "Booking.com",
+        "Hotels.com"
+      ],
+      notificationExpanded: true,
+      showNotification: !localStorage.getItem('business_agree')
+    };
+  },
+  methods: {
+    userAgree: function(){
+      this.showNotification  = false;
+      localStorage.setItem('business_agree', true)
+    }
+  }
 };
 </script>
 
@@ -57,6 +94,61 @@ export default {
   padding: 30px;
   margin-top: 10px;
   min-height: 80px;
+  &__wrpr {
+    background-color: @color-white;
+  }
+
+  &__ntfctn {
+    position: relative;
+    margin-top: 30px;
+    border-radius: 3px;
+    font-size: @font-size-xs;
+    color: @fg-color-light;
+    line-height: 20px;
+    padding: 12px 14px;
+    background-color: rgba(245, 166, 35, 0.1);
+    border: 1px solid rgba(245, 166, 35, 0.2);
+    overflow: hidden;
+    height: 50px;
+    &-btn{
+      padding: 8px 15px !important;
+      &-wrpr{
+        text-align: right;
+        margin-top: 10px;
+      }
+    }
+    &--expnd{
+      height: auto;
+    }
+    &-more {
+      position: absolute;
+      width: 100%;
+      height: 30px;
+      z-index: 2;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
+      &-txt{
+        position: absolute;
+        right: 10px;
+        bottom: 5px;
+        font-weight: @bold;
+        font-size: @font-size-xs;
+        color: @fg-color;
+        cursor: pointer;
+      }
+    }
+    &-sctn {
+      margin: 10px 0;
+    }
+    &-item {
+      font-weight: @semi-bold;
+      & + & {
+        margin-left: 15px;
+      }
+    }
+  }
+
   &--ldng {
     background: linear-gradient(
       to right,
@@ -83,66 +175,6 @@ export default {
   &__rght {
     float: right;
   }
-  &__btn {
-    &-rdm {
-        &.btn{
-            vertical-align: middle;
-            margin-left: 27px;
-            .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/wallet.png', 14px);
-            background-position: left 12px center;
-            padding-left: 36px;
-            text-transform: uppercase;
-            vertical-align: middle;
-        }
-    }
-  }
-  &-cb {
-    display: inline-block;
-    border: 1px solid @border-color;
-    border-radius: 3px;
-    vertical-align: middle;
-    cursor: pointer;
-
-    &__lft {
-      display: inline-block;
-      padding: 15px;
-      &-txt {
-        color: @color-green;
-        font-weight: @bold;
-      }
-      &-amt{
-          .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/coin.png', 20px);
-          padding-left: 24px;
-          font-size: 18px;
-          line-height: 21px;
-          color: @color-green;
-          font-weight: @bold;
-          width: 22px;
-          margin: 8px auto 0 auto;
-      }
-    }
-    &__rght {
-      display: inline-block;
-      padding: 15px;
-      border-left: 1px solid @border-color;
-      margin-left: -.28em;
-      line-height: 15px;
-      font-size: @font-size-xs;
-      &-pndng{
-          .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/wait.png', 13px);
-          padding-left: 18px;
-          color: @color-grey-2;
-          
-      }
-      &-cnfrmd{
-          margin-top: 15px;
-          color: @color-green;
-          .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/tick.png', 13px);
-          padding-left: 18px;
-      }
-      
-    }
-  }
   &__sdbr {
     float: left;
     width: 287px;
@@ -151,7 +183,7 @@ export default {
     float: left;
     width: 712px;
     border-left: 1px solid @border-color;
-    min-height: 510px;
+    min-height: 544px;
     position: relative;
   }
   &-sctn {
@@ -168,30 +200,30 @@ export default {
   }
 }
 
-.unvrfd{
-    .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/error-grey.png', 15px);
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    position: relative;
-    left: 2px;
-    top: 3px;
+.unvrfd {
+  .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/error-grey.png', 15px);
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  position: relative;
+  left: 2px;
+  top: 3px;
 }
 
-.bdg{
-    &--pro{
-        padding: 3px 8px;
-        font-weight: @bold;
-        font-size: @font-size-2xs;
-        border-radius: 2px;
-        border: 1px solid #e8bf7a;
-        color: @color-white;
-        background: linear-gradient(to right, #f6c621, #dc9e16);
-        line-height: 1;
-        position: relative;
-        top: -2px;
-        left: 2px;
-    }
+.bdg {
+  &--pro {
+    padding: 3px 8px;
+    font-weight: @bold;
+    font-size: @font-size-2xs;
+    border-radius: 2px;
+    border: 1px solid #e8bf7a;
+    color: @color-white;
+    background: linear-gradient(to right, #f6c621, #dc9e16);
+    line-height: 1;
+    position: relative;
+    top: -2px;
+    left: 2px;
+  }
 }
 
 @keyframes rotate-bg {
@@ -200,6 +232,73 @@ export default {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@media screen and (max-width: @breakpoint) {
+  .prfl {
+    &__ntfctn{
+      &-item{
+        margin-right: 15px;
+        & + &{
+          margin: 0 15px 0 0;
+        }
+      }
+      &-btn{
+        &-wrpr{
+          text-align: center;
+        }
+      }
+    }
+    &.sctn {
+      background-color: @bg-color;
+    }
+    &__inr {
+      text-align: center;
+    }
+    .usr-wdgt {
+      float: none;
+    }
+    .usr-wdgt {
+      &__info {
+        float: none;
+        margin: 20px 0 0 0;
+      }
+      &__img {
+        &-wrpr {
+          float: none;
+          margin: 0 auto;
+        }
+      }
+    }
+    &__rght {
+      float: none;
+      margin-top: 30px;
+    }
+    &__btn-rdm.btn {
+      margin: 30px 0 0 0;
+      font-size: @font-size-xs;
+      background-size: 15px;
+    }
+    &__sdbr {
+      float: none;
+      width: 100%;
+      .list {
+        box-shadow: @box-shadow-2;
+        > a {
+          display: block;
+          + a {
+            border-top: 1px solid @border-color;
+          }
+        }
+        &--s {
+          margin-top: 10px;
+        }
+        + .list {
+          border: 0;
+        }
+      }
+    }
   }
 }
 </style>

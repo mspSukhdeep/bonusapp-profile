@@ -66,11 +66,17 @@ body {
     &--grn{
         color: @color-green;
     }
+    &--orng{
+        color: @color-golden;
+    }
     &--blk{
         color: @fg-color;
     }
     &--gry{
         color: @fg-color-light;
+        &-2{
+            color: @color-grey-2;
+        }
     }
     &--strk{
         text-decoration: line-through;
@@ -100,6 +106,7 @@ body {
 
 @keyframes zoomIn {
     0% { transform: scale(1,1); }
+   70% { transform: scale(11,11); }
   100% { transform: scale(9,9); }
 }
 
