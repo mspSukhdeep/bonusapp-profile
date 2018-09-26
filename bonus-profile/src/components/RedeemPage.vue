@@ -1,9 +1,11 @@
 <template>
     <div class="prfl-sctn">
         <div class="rdm-sctn__ttl" v-display="'desktop'">Redeem Cashback</div>
-        <div v-display="'mobile'" class="prfl-cb__wdgt" v-if="!appState.redemptionView">
-            <cashback-widget nobutton="true">
-            </cashback-widget>
+        <div v-display="'mobile'">
+          <div class="prfl-cb__wdgt" v-if="!appState.redemptionView">
+              <cashback-widget nobutton="true">
+              </cashback-widget>
+          </div> 
         </div>
         <div v-if="appState.redemptionView">
             <div class="rdm-wdgt">
@@ -71,35 +73,9 @@
                     </div>
                     <otp-widget v-if="appState.subView===2" @verified="redeem"></otp-widget>
                 </div>
-                
-                <div v-else-if="appState.redemptionView==='success'">
-                    <div class="rdm-wdgt__inr">
-                        <div class="rdm-wdgt__scss">
-                            <div class="rdm-wdgt__star-wrpr">
-                                <div class="rdm-wdgt__star">
-                                </div>
-                                <img class="rdm-wdgt__thumb" src="https://assets.mspcdn.net/f_auto/bonus_in/icon/thumbsup.png" />
-                            </div>
-                            <div class="rdm-wdgt__scss-msg">
-                                Cheers!
-                            </div>
-                            <div class="rdm-wdgt__scss-txt">
-                                You have successfully redeemed
-                            </div>
-                            <div class="rdm-wdgt__scss-item">
-                                {{appState.selectedItem.label}} worth ₹{{appState.selectedItem.amount}}
-                            </div>
-                            <div class="rdm-wdgt__scss-ntfctn">
-                                An email regarding your redemption has been sent to <span class="txt--bold">{{profile.email}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rdm-wdgt__ftr">
-                        <router-link to="/" class="btn rdm-wdgt__btn">SHOW CASHBACK PASSBOOK</router-link>
-                    </div>
-                </div>
+                <redemption-success-message v-else-if="appState.redemptionView==='success'" :text="redeemedText" :email="profile.email">
+                </redemption-success-message>
                 <div class="rdm-wdgt__arw" :style="{ left: arrowPosition + 'px'}"></div>
-                <!--  -->
             </div>
         </div>
         <div class="rdm-item-wrpr clearfix" v-if="!(display==='mobile' && appState.redemptionView)">
@@ -121,6 +97,7 @@
 import Axios from "axios";
 import OtpWidget from "./OtpWidget";
 import CashbackWidget from "./CashbackWidget";
+import RedemptionSuccessMessage from './RedemptionSuccessMessage';
 
 const API = Axios.create({
   withCredentials: true
@@ -129,95 +106,17 @@ const API = Axios.create({
 const AUTH_API = "https://www.bonusapp.com/users/mobile_number_auth.php",
   REDEEM_API = "https://www.bonusapp.com/me/redeem.php";
 
-function initState({ view } = {}) {
-  return {
-    redeemOptions: [
-      {
-        label: "Transfer Cashback to Bank Account",
-        type: "bank",
-        icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/bank.png"
-      },
-      {
-        label: "Transfer Cashback to Paytm Account",
-        type: "paytm",
-        icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/paytm.png"
-      },
-      {
-        label: "Redeem Amazon Gift Card",
-        type: "amazon",
-        icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/amazon.png"
-      }
-    ],
-    slabOptions: {
-      paytm: {
-        id: 1,
-        label: "Paytm Cash",
-        slabs: [20, 200, 250],
-        title: "Transfer cashback to Paytm account",
-        isFlexi: true,
-        info: "AMOUNT YOU WANT TO REDEEM (min. amount ₹20)",
-        description:
-          "Paytm is one of the biggest recharge site in India that delivers instant online prepaid recharge & mobile bill payment solutions to end users."
-      },
-      amazon: {
-        id: 36,
-        label: "Amazon Pay Balance",
-        slabs: [500],
-        title: "Transfer cashback to Amazon Pay account",
-        info: "AMOUNT YOU WANT TO REDEEM",
-        isFlexi: false,
-        description:
-          "Amazon Pay provides the option to purchase goods and services from websites and mobile apps using the addresses and payment methods stored in the Amazon account."
-      }
-    },
-    bankForm: {
-      name: {
-        label: "Account Holder Name",
-        value: "",
-        type: "text",
-        error: "",
-        focus: false
-      },
-      number: {
-        label: "Account Number",
-        value: "",
-        type: "number",
-        error: "",
-        focus: false
-      },
-      amount: {
-        label: "Withdrawl Amount",
-        value: "",
-        type: "number",
-        error: "",
-        focus: false
-      },
-      ifsc: {
-        label: "IFSC Code",
-        value: "",
-        type: "text",
-        error: "",
-        focus: false
-      }
-    },
-    appState: {
-      redemptionView: view,
-      subView: 1,
-      OTP: "",
-      selectedItem: {
-        amount: 0
-      }
-    }
-  };
-}
-
 export default {
   name: "RedeemPage",
   components: {
     OtpWidget,
-    CashbackWidget
+    CashbackWidget,
+    RedemptionSuccessMessage
   },
   computed: {
+    redeemedText: function() {
+      return `${this.appState.selectedItem.label} worth ₹${this.appState.selectedItem.amount}`;
+    },
     display: function() {
       return this.$store.state.app.window.width > 720 ? "desktop" : "mobile";
     },
@@ -250,7 +149,85 @@ export default {
     }
   },
   data: function() {
-    return initState();
+    return {
+      redeemOptions: [
+        {
+          label: "Transfer Cashback to Bank Account",
+          type: "bank",
+          icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/bank.png"
+        },
+        {
+          label: "Transfer Cashback to Paytm Account",
+          type: "paytm",
+          icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/paytm.png"
+        },
+        {
+          label: "Redeem Amazon Gift Card",
+          type: "amazon",
+          icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/amazon.png"
+        }
+      ],
+      slabOptions: {
+        paytm: {
+          id: 1,
+          label: "Paytm Cash",
+          slabs: [20, 200, 250],
+          title: "Transfer cashback to Paytm account",
+          isFlexi: true,
+          info: "AMOUNT YOU WANT TO REDEEM (min. amount ₹20)",
+          description:
+            "Paytm is one of the biggest recharge site in India that delivers instant online prepaid recharge & mobile bill payment solutions to end users."
+        },
+        amazon: {
+          id: 36,
+          label: "Amazon Pay Balance",
+          slabs: [500],
+          title: "Transfer cashback to Amazon Pay account",
+          info: "AMOUNT YOU WANT TO REDEEM",
+          isFlexi: false,
+          description:
+            "Amazon Pay provides the option to purchase goods and services from websites and mobile apps using the addresses and payment methods stored in the Amazon account."
+        }
+      },
+      bankForm: {
+        name: {
+          label: "Account Holder Name",
+          value: "",
+          type: "text",
+          error: "",
+          focus: false
+        },
+        number: {
+          label: "Account Number",
+          value: "",
+          type: "number",
+          error: "",
+          focus: false
+        },
+        amount: {
+          label: "Withdrawl Amount",
+          value: "",
+          type: "number",
+          error: "",
+          focus: false
+        },
+        ifsc: {
+          label: "IFSC Code",
+          value: "",
+          type: "text",
+          error: "",
+          focus: false
+        }
+      },
+      appState: {
+        redemptionView: "",
+        subView: 1,
+        OTP: "",
+        selectedItem: {
+          amount: 0
+        }
+      }
+    }
   },
   methods: {
     giftImage: function(source) {
@@ -356,10 +333,8 @@ export default {
         .then(() => {
           // Reset Page Params - Data Variables
           // Fetch new Passbook data - Or we can just postpone that
-          this.appState.redemptionView = "success";
-          this.OTP = "";
-          this.subView = 1;
-          
+          this.appState.OTP = "";
+          this.appState.subView = 1;
           this.$store.dispatch("fetchProfile");
           this.$store.dispatch("fetchPassbook");
         });

@@ -30,7 +30,7 @@ export default {
   name: "BonusHead",
   computed: {
     coins: function() {
-      return UTILS.number.format(
+      return UTILS.number.toInt(
         this.$store.state.profile.pending_cashback +
           this.$store.state.profile.verified_cashback
       );

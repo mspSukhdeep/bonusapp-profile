@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     desktop: function() {
-      return this.$store.state.app.window.width > 720;
+      return this.$store.state.app.window.width > 1200;
     },
     size: function() {
       return this.$store.state.app.window.width;
@@ -60,10 +60,6 @@ export default {
   },
   store,
   created() {
-    window.addEventListener("resize", this.handleResize);
-    this.handleResize();
-  },
-  mounted() {
     let qS = UTILS.queryString();
     if (qS && qS.device_os === "android" && qS.auth_token) {
       UTILS.cookie.set("msp_login", "1", 1);
@@ -74,6 +70,10 @@ export default {
         type: qS.network?"MSP":"BONUS"
       });
     }
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
+  mounted() {
     if(window.location.pathname.indexOf("change-number")===-1){
       this.$store.dispatch("fetchProfile");
     }

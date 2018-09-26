@@ -41,9 +41,9 @@ export default {
     },
     cashback: function() {
       return {
-        pending: UTILS.number.format(this.profile.pending_cashback),
-        verified: UTILS.number.format(this.profile.verified_cashback),
-        total: UTILS.number.format(this.profile.verified_cashback+this.profile.pending_cashback)
+        pending: UTILS.number.toInt(this.profile.pending_cashback),
+        verified: UTILS.number.toInt(this.profile.verified_cashback),
+        total: UTILS.number.toInt(this.profile.verified_cashback+this.profile.pending_cashback)
       }
     },
   }
