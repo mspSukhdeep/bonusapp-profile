@@ -7,7 +7,7 @@
 		<div class="clms__ttl-sub">SELECT YOUR ISSUE</div>
 		<div class="clms-item-wrpr">
       <div class="clms-item" :class="{'clms-item--slctd': view==='cashback'}">
-          <div class="clms-item__inr clearfix" @click="changeView('cashback')">
+          <div class="clms-item__inr clearfix" @click="changeView('cashback')" id="issue_1" v-scroll-to="'#issue_1'">
             <div class="clms-item__img-wrpr"><img src="https://assets.mspcdn.net/f_auto/bonus_in/icon/cashback-failed.png" class="clms-item__img"></div>
             <div class="clms-item__info">
                 <div class="clms-item__txt">
@@ -60,7 +60,7 @@
           </div>
       </div>
       <div class="clms-item" :class="{'clms-item--slctd': view==='redemption'}">
-          <div class="clms-item__inr clearfix" @click="changeView('redemption')">
+          <div class="clms-item__inr clearfix" @click="changeView('redemption')" id="issue_2" v-scroll-to="'#issue_2'">
             <div class="clms-item__img-wrpr"><img src="https://assets.mspcdn.net/f_auto/bonus_in/icon/redemption-failed.png" class="clms-item__img"></div>
             <div class="clms-item__info">
                 <div class="clms-item__txt">
@@ -144,6 +144,10 @@
 </div>   
 </template>
 <script>
+import Vue from "vue";
+import VueScrollTo from "vue-scrollto";
+Vue.use(VueScrollTo);
+
 import UTILS from "../utils/";
 import Axios from "axios";
 import MaterialInput from "./MaterialInput";
@@ -234,7 +238,6 @@ function uploadFile(requestParam) {
   return new Promise((resolve, reject) => {
     let timestamp = Date.now(),
       uid = UTILS.cookie.get("msp_login_email"),
-      imageUrl = `invoice-${uid}-${timestamp}.png`,
       file = requestParam.data.file,
       response = {};
 
@@ -246,9 +249,6 @@ function uploadFile(requestParam) {
 
       reject(response);
     } else {
-      let formData = new FormData();
-      formData.append("key", imageUrl);
-
       if (file.size > 2 * 1024 * 1024 || !isValidFile(file.name)) {
         response = {
           status: "failed",
@@ -257,6 +257,12 @@ function uploadFile(requestParam) {
         reject(response);
       }
 
+      let formData = new FormData(),
+        extSplit = file.name.split("."),
+        ext = extSplit[extSplit.length - 1],
+        imageUrl = `invoice-${uid}-${timestamp}.${ext}`;
+
+      formData.append("key", imageUrl);
       formData.append("file", file);
 
       appendS3Credentials(formData);
@@ -345,8 +351,8 @@ export default {
     return intialState();
   },
   computed: {
-    isAndroidApp: function(){
-      return this.$store.state.app.device==="app";
+    isAndroidApp: function() {
+      return this.$store.state.app.device === "app";
     },
     display: function() {
       return this.$store.state.app.window.width > 720 ? "desktop" : "mobile";

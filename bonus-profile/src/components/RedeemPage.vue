@@ -18,7 +18,23 @@
                         <div class="rdm-wdgt__inr">
                             <div class="rdm-wdgt__top" v-display="'desktop'">
                                 <div class="rdm-wdgt__ttl">{{slabOptions[appState.redemptionView].title}}</div>
-                                <div class="rdm-wdgt__dscrptn" >{{slabOptions[appState.redemptionView].description}}</div>
+                                <div class="rdm-wdgt__dscrptn">{{slabOptions[appState.redemptionView].description}} <span v-if="slabOptions[appState.redemptionView].showTnC" @click="appState.showTnC = true" class="text-link">Terms and Conditions</span></div>
+                                  <modal v-if="appState.showTnC" @close="appState.showTnC = false">
+                                        <h3 slot="header">Terms and Conditions</h3>
+                                        <div slot="body">
+                                          <ul>
+                                            <li>Amazon.in E-Gift Cards (“EGCs”) are issued by QwikCilver Solutions Private Limited (“QwikCilver”).</li>
+                                            <li>EGCs may be used only for the purchase of eligible products on Amazon.in.</li>
+                                            <li>EGC balances must be used within 1 year of the date of purchase.</li>
+                                            <li>EGCs cannot be transferred for value or redeemed for cash.</li>
+                                            <li>QwikCilver, Amazon Seller Services Private Limited (“Amazon”) or their affiliates are not responsible if an EGC is lost, stolen, destroyed or used without permission.</li>
+                                            <li>To redeem your EGC, visit <a target="_blank" href="https://www.amazon.in/addgiftcard">www.amazon.in/addgiftcard</a></li>
+                                            <li>For complete terms and conditions, see <a target="_blank" href="https://www.amazon.in/giftcardtnc">www.amazon.in/giftcardtnc</a></li>
+                                            <li>E-Gift Cards are normally delivered instantly. But sometimes due to system issues, the delivery can be delayed up-to 24 hours.</li>
+                                            <li>No returns and no refunds on gift cards, E- gift cards and gift vouchers shipped by woohoo.in. Please check the refund policy at <a href="http://www.woohoo.in/faq/#shipping" target="_blank">http://www.woohoo.in/faq/#shipping</a> for further details.</li>
+                                          </ul>
+                                        </div>
+                                  </modal>
                             </div>
                             <div>
                                 <div class="rdm-wdgt__rwrd-ttl">{{slabOptions[appState.redemptionView].info}}</div>
@@ -98,6 +114,7 @@ import Axios from "axios";
 import OtpWidget from "./OtpWidget";
 import CashbackWidget from "./CashbackWidget";
 import RedemptionSuccessMessage from './RedemptionSuccessMessage';
+import modal from './modal';
 
 const API = Axios.create({
   withCredentials: true
@@ -111,7 +128,8 @@ export default {
   components: {
     OtpWidget,
     CashbackWidget,
-    RedemptionSuccessMessage
+    RedemptionSuccessMessage,
+    modal
   },
   computed: {
     redeemedText: function() {
@@ -175,6 +193,7 @@ export default {
           title: "Transfer cashback to Paytm account",
           isFlexi: true,
           info: "AMOUNT YOU WANT TO REDEEM (min. amount ₹20)",
+          showTnC: false,
           description:
             "Paytm is one of the biggest recharge site in India that delivers instant online prepaid recharge & mobile bill payment solutions to end users."
         },
@@ -185,8 +204,9 @@ export default {
           title: "Transfer cashback to Amazon Pay account",
           info: "AMOUNT YOU WANT TO REDEEM",
           isFlexi: false,
+          showTnC: true,
           description:
-            "Amazon Pay provides the option to purchase goods and services from websites and mobile apps using the addresses and payment methods stored in the Amazon account."
+            `Amazon Pay provides the option to purchase goods and services from websites and mobile apps using the addresses and payment methods stored in the Amazon account.`
         }
       },
       bankForm: {
@@ -225,7 +245,8 @@ export default {
         OTP: "",
         selectedItem: {
           amount: 0
-        }
+        },
+        showTnC: false
       }
     }
   },

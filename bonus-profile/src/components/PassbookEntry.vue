@@ -1,6 +1,6 @@
 <template>
     <div class="prfl-tbl__row clearfix"
-            :class="{'prfl-tbl__row--exprd': entry.type==='expired', 'prfl-tbl__row--fld': entry.status==='failure'}">
+            :class="{'prfl-tbl__row--exprd': entry.type==='expired', 'prfl-tbl__row--fld': entry.status==='failure', 'prfl-tbl__row--cncld': entry.type==='cancelled'}">
                 <div v-if="isDesktop">
                     <div class="prfl-tbl__date">
                         {{ entry.date }}
@@ -25,10 +25,10 @@
                     </div>
                     <div class="prfl-tbl__cb" 
                         v-if="entry.cashback"
-                        :class="{ 'txt--grn': entry.cashback>0, 'txt--red': entry.cashback<0, 'txt--strk txt--gry-2': entry.status==='failure' }">
+                        :class="{ 'txt--grn': entry.cashback>0, 'txt--red': entry.cashback<0, 'txt--strk txt--gry-2': (entry.status==='failure' || entry.type==='cancelled') }">
                             <span v-if="entry.type==='pending'" class="prfl-tbl__cb--pndng">₹{{Math.abs(entry.cashback)}}</span>
                             <div v-else>
-                                <span class="txt--bold">{{getSign(entry.cashback)}}</span> 
+                                <span v-if="entry.type!='cancelled'" class="txt--bold">{{getSign(entry.cashback)}}</span> 
                                 ₹{{Math.abs(entry.cashback)}}
                             </div>
                     </div>

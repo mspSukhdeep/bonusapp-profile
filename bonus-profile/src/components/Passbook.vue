@@ -120,6 +120,10 @@ export default {
           value: "redeemed"
         },
         {
+          label: "CANCELLED",
+          value: "cancelled"
+        },
+        {
           label: "EXPIRED",
           value: "expired"
         }

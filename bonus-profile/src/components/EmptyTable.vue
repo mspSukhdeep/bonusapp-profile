@@ -10,7 +10,7 @@
                 No entries yet
             </div>
             <div class="empty-txt">
-                You haven't let any expire yet. Kudos!
+                You haven't let cashback any expire yet. Kudos!
             </div>
         </div>
     </div>

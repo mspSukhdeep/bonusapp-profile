@@ -19,7 +19,7 @@
     <div class="inpt-wrpr--msg">
         <div class="inpt-wrpr inpt-wrpr--mob">
             <label class="inpt-lbl inpt-lbl--vsbl">Mobile Number</label>
-            <input type="text" class="inpt" placeholder="Mobile Number" v-model="profile.mobile">
+            <input type="text" class="inpt" placeholder="Mobile Number" v-model="profile.mobile" readonly>
             <span class="inpt-link" @click="changeMobile" v-if="!changeRequestStatus">Change Mobile</span>
             <div class="inpt-ldr" v-if="changeRequestStatus==='sent'"></div>
             <div class="inpt-err"></div>

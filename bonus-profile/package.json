@@ -16,6 +16,7 @@
     "vue": "^2.5.2",
     "vue-responsive": "^1.0.1",
     "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.13.0",
     "vuejs-datepicker": "^1.5.3",
     "vuex": "^3.0.1"
   },
