@@ -1,22 +1,22 @@
 <template>
     <transition name="modal">
     <div class="modal-mask" @click="$emit('close')">
-      <div class="modal-wrapper">
         <div class="modal-container"  @click.stop>
-
+        
           <div class="modal-header">
             <slot name="header">
               
             </slot>
           </div>
-
-          <div class="modal-body">
-            <slot name="body">
+            <div class="modal-wrapper">
+            <div class="modal-body">
+                <slot name="body">
               
-            </slot>
-          </div>
-        <div class="modal-close" @click="$emit('close')"></div>
-        </div>
+                </slot>
+            </div>
+            </div>
+            <div class="modal-close" @click="$emit('close')"></div>
+      </div>
       </div>
     </div>
   </transition>
@@ -40,38 +40,43 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
-  display: table;
   transition: opacity .3s ease;
+  display: flex;
+align-items: flex-start;
 }
 
 .modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
+    overflow: scroll;
 }
 
 .modal-container {
-  width: 650px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-  color: @fg-color-light;
-  font-size: @font-size-s;
-  position: relative;
+    margin: auto;
+    height: auto;
+    width: 90%;
+    max-height: 80%;
+    max-width: 650px;
+    box-sizing: border-box;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+    color: @fg-color-light;
+    font-size: @font-size-s;
+    position: relative;
+    display: flex;
+    flex-flow: column;
 }
 
 .modal-header h3 {
   margin-top: 0;
   color: @color-green;
   font-size: @font-size-xl;
-  margin-top: 5px;
+  margin: 5px 0 20px 0;
 }
 
 .modal-body {
-  margin: 20px 0;
   line-height: 1.5;
 }
 
