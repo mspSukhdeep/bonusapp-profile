@@ -1,11 +1,13 @@
 <template>
     <div class="prfl-tbl__row clearfix"
-            :class="{'prfl-tbl__row--exprd': entry.type==='expired', 'prfl-tbl__row--fld': entry.status==='failure', 'prfl-tbl__row--cncld': entry.type==='cancelled'}">
+            :class="{'prfl-tbl__row--exprd': entry.type==='expired', 'prfl-tbl__row--fld': entry.status==='failure', 'prfl-tbl__row--cncld': entry.type==='cancelled'}"
+            @click="expanded=!expanded"
+            >
                 <div v-if="isDesktop">
-                    <div class="prfl-tbl__date">
+                    <div class="prfl-tbl__date" :class="{'prfl-tbl__date--l':type==='claim'}">
                         {{ entry.date }}
                     </div>
-                    <div class="prfl-tbl__entry"> 
+                    <div :class="{'prfl-tbl__issue': type==='claim', 'prfl-tbl__entry': type!=='claim'}">
                         {{ title }}
                         <div class="prfl-tbl__dscrptn" 
                             v-for="(value, key) in entry.info" 
@@ -31,6 +33,11 @@
                                 <span v-if="entry.type!='cancelled'" class="txt--bold">{{getSign(entry.cashback)}}</span> 
                                 ₹{{Math.abs(entry.cashback)}}
                             </div>
+                    </div>
+                    <div class="prfl-tbl__lng-dsc"
+                        v-if="type==='claim'"
+                        >
+                            {{entry.description}}
                     </div>
                 </div>
                 <div v-else>
@@ -69,6 +76,9 @@
                         </div>
 
                     </div>
+                    <div class="prfl-tbl__dtls" v-if="entry.description && expanded">
+                        {{ entry.description }}
+                    </div>
                 </div>
     </div>
 </template>
@@ -76,6 +86,11 @@
 export default {
   name: "PassbookEntry",
   props: ["entry", "type"],
+  data: function(){
+      return {
+          expanded: false
+      }
+  },
   computed: {
     isDesktop: function() {
       return this.$store.state.app.window.width > 720;
@@ -88,11 +103,17 @@ export default {
     formatKey(inputString) {
       return inputString.replace("_", " ");
     },
-    getSign(value){
-        return value>0?"+":"-";
+    getSign(value) {
+      return value > 0 ? "+" : "-";
     }
   }
 };
 </script>
 <style lang="less">
+.prfl-tbl__dtls {
+  color: #444;
+  margin-top: 10px;
+  border-top: 1px dashed #dfe1e8;
+  padding-top: 10px;
+}
 </style>
