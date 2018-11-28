@@ -12,7 +12,8 @@ const HomePage = () => import("../components/HomePage"),
       EditProfile = () => import("../components/EditProfile"),
       HowItWorks = () => import("../components/HowItWorks"),
       FAQPage = () => import("../components/FAQ"),
-      BlockedPage = () => import("../components/BlockedPage");
+      BlockedPage = () => import("../components/BlockedPage"),
+      GiftCardCheckoutPage = () => import("../components/GiftCardCheckout");
 
 
 Vue.use(Router);
@@ -86,6 +87,15 @@ export default new Router({
       component: BlockedPage,
       meta: {
         standAlone: true
+      }
+    },
+    {
+      path: "/checkout/gc/:store",
+      name: "GiftCardCheckout",
+      props: true,
+      component: GiftCardCheckoutPage,
+      meta: {
+        headered: true
       }
     }
   ]
