@@ -1,6 +1,11 @@
 <template>
 <div>
   <router-view v-if="standAlone"></router-view>
+  <div v-else-if="headered">
+    <bonus-head>
+    </bonus-head>
+    <router-view></router-view>
+  </div>
   <div v-else>
     <bonus-head>
     </bonus-head>
@@ -56,7 +61,10 @@ export default {
     },
     standAlone: function(){
       return this.$route.meta.standAlone;
-    }
+    },
+    headered: function(){
+      return this.$route.meta.headered;
+    },
   },
   store,
   created() {
