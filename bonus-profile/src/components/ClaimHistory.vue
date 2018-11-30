@@ -1,26 +1,25 @@
 <template>
-    <div v-if="filteredHistory.length>0">
-        <div class="prfl-sctn__ttl">Claims History</div>
-        <div class="prfl-tbl">
-    <div class="prfl-tbl__hd clearfix" v-display="'desktop'">
-        <div class="prfl-tbl__date prfl-tbl__date--l">date </div>
-        <div class="prfl-tbl__issue">claims/Issues </div>
-        <div class="prfl-tbl__lng-dsc">description </div>
-    </div>
-    <div class="prfl-tbl__body">
-        <passbook-entry 
-                :entry="entry" 
-                v-for="(entry, index) in filteredHistory" 
-                :key="index"
-                type="claim"
-           >
-        </passbook-entry>
+  <div v-if="filteredHistory.length>0">
+    <div class="prfl-sctn__ttl">Claims History</div>
+    <div class="prfl-tbl">
+      <div class="prfl-tbl__hd clearfix" v-display="'desktop'">
+        <div class="prfl-tbl__date prfl-tbl__date--l">date</div>
+        <div class="prfl-tbl__issue">claims/Issues</div>
+        <div class="prfl-tbl__lng-dsc">description</div>
+      </div>
+      <div class="prfl-tbl__body">
+        <passbook-entry
+          :entry="entry"
+          v-for="(entry, index) in filteredHistory"
+          :key="index"
+          type="claim"
+        ></passbook-entry>
         <div class="prfl-tbl__more-btn" v-if="!showAll">
-            <div class="btn btn--inv btn--l" @click="showAll=true">Show Complete History</div>
+          <div class="btn btn--inv btn--l" @click="showAll=true">Show Complete History</div>
         </div>
+      </div>
     </div>
-</div>
-    </div>
+  </div>
 </template>
 <script>
 import PassbookEntry from "./PassbookEntry";
@@ -35,14 +34,24 @@ export default {
   },
   computed: {
     filteredHistory: function() {
-        let itemCount = 0;
-        return this.$store.state.claimHistory.filter((item) => {
-            if(this.showAll || (item.status === "Pending" && itemCount<2)){
-                itemCount++;
-                return true;
-            }
-            return false;
+      let itemCount = 0,
+        result = this.$store.state.claimHistory.filter(item => {
+          if (this.showAll || (item.status === "Pending" && itemCount < 2)) {
+            itemCount++;
+            return true;
+          }
+          return false;
         });
+      if (itemCount === 0) {
+        result = this.$store.state.claimHistory.filter(item => {
+          if (this.showAll || itemCount < 1) {
+            itemCount++;
+            return true;
+          }
+          return false;
+        });
+      }
+      return result;
     }
   },
   methods: {
@@ -54,7 +63,7 @@ export default {
     this.$store.dispatch("fetchClaimHistory");
   },
   components: {
-      PassbookEntry
+    PassbookEntry
   }
 };
 </script>
@@ -62,14 +71,14 @@ export default {
 @import "../style/bonus_profile.less";
 
 @media screen and (max-width: @breakpoint) {
-    .prfl{
-        &-sctn{
-            &__ttl{
-                padding: 10px;
-                font-weight: @bold;
-                font-size: @font-size-l;
-            }
-        }
+  .prfl {
+    &-sctn {
+      &__ttl {
+        padding: 10px;
+        font-weight: @bold;
+        font-size: @font-size-l;
+      }
     }
+  }
 }
 </style>
