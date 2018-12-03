@@ -56,15 +56,17 @@ export default new Veux.Store({
             });
         },
         updateProfile(state, payload){
-            
-            if(!payload || !payload.email){
+            if(!payload.data || !payload.data.email){
+                if(payload.disableLoginCheck){
+                    return;
+                }
                 let params = "?utm_source=bonusapp&desturl=" + encodeURIComponent(window.location.href);
                 UTILS.login("login", params);
                 return;
             }
             // delete payload.mobile;
-            UTILS.setProfileCookies(payload);
-            state.profile = payload;
+            UTILS.setProfileCookies(payload.data);
+            state.profile = payload.data;
             state.profile.name = state.profile.name || UTILS.cookie.get("msp_login_name");
         },
         updateReferInfo(state, payload){
@@ -103,7 +105,11 @@ export default new Veux.Store({
             return new Promise((resolve, reject) => {
                 API.get(ResourceURL('profile'), payload.page).then(response => {
                     if(response.status===200){
-                        context.commit('updateProfile', response.data);
+                        let params = {
+                            data: response.data,
+                            disableLoginCheck: payload.disableLoginCheck
+                        }
+                        context.commit('updateProfile', params);
                         resolve();
                     }
                     else{

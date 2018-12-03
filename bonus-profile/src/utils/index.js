@@ -179,12 +179,12 @@ let UTILS = {
     }
   },
   login: (loginType, queryParams) => {
-    let pageURL = "https://m.mysmartprice.com/users/login.php";
+    let pageURL = "https://www.mysmartprice.com/users/login.php";
 
     if (loginType == "signup") {
-      pageURL = "https://m.mysmartprice.com/users/signup.php";
+      pageURL = "https://www.mysmartprice.com/users/signup.php";
     } else if (loginType == "login") {
-      pageURL = "https://m.mysmartprice.com/users/login.php";
+      pageURL = "https://www.mysmartprice.com/users/login.php";
     }
     window.location.href = pageURL + queryParams;
   },

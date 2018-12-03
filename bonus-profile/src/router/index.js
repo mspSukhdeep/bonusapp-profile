@@ -95,7 +95,8 @@ export default new Router({
       props: true,
       component: GiftCardCheckoutPage,
       meta: {
-        headered: true
+        headered: true,
+        disableLoginCheck: true
       }
     }
   ]

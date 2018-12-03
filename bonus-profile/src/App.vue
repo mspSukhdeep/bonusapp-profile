@@ -64,7 +64,7 @@ export default {
     },
     headered: function(){
       return this.$route.meta.headered;
-    },
+    }
   },
   store,
   created() {
@@ -82,8 +82,8 @@ export default {
     this.handleResize();
   },
   mounted() {
-    if(window.location.pathname.indexOf("change-number")===-1){
-      this.$store.dispatch("fetchProfile");
+    if(window.location.pathname.indexOf("change-number")===-1 && window.location.pathname.indexOf("/checkout/")===-1){
+      this.$store.dispatch("fetchProfile", {});
     }
   },
   destroyed() {
