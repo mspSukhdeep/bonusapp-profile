@@ -188,6 +188,27 @@ let UTILS = {
     }
     window.location.href = pageURL + queryParams;
   },
+  windowLogin(pageType, queryParams, callback = null){
+    var pageURL = "https://www.mysmartprice.com/users/";
+    pageURL = (pageType == "signup") ? "https://www.mysmartprice.com/users/signup.php" 
+              : ((pageType == "login") ? "https://www.mysmartprice.com/users/login.php" : pageURL);
+    var newWindow = window.open(pageURL + queryParams);
+    window.addEventListener("message", receiveWindowMessage, false);
+    /* Inner Functions: */
+    function receiveWindowMessage(event) {
+      newWindow.close();
+      if(event.data === 'update_ui') {
+        if(callback) callback();
+      }
+    }
+  },
+  setupWindowLogin(page, ref, mustClose, callback = null) { // ref param not used; kept for calling consistency with MSP
+    var windowParams = "?ref=bonusapp&destUrl=" + encodeURIComponent(window.location.href);
+    if ((window.screenTop || window.screenY) || navigator.platform.toUpperCase().indexOf('MAC')==-1 || mustClose) {
+        windowParams += "&close=1";
+    }
+    this.windowLogin(page, windowParams, callback);
+  },
   queryString: searchOrHash => {
     var query,
       query_string = {},
