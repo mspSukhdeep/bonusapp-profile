@@ -375,7 +375,7 @@ export default {
     },
     fetchStoreData() {
       axios
-      .get(`https://www.bonusapp.com/test-storedetails.php?nocache=${Math.floor(Math.random() * 5000)}&store=${this.store}`)
+      .get(`https://www.bonusapp.com/gc/api/product.php?store=${this.store}&source=cron`)
       .then(response => {
         let _data = response.data;
         /* Sort vouchers into descending order of voucher amounts: */
@@ -557,6 +557,7 @@ export default {
       let _giftcard = this;     
       let data = {
         store: this.storeDetails.name,
+        productId: this.storeDetails.productId,
         totalVoucherAmount: this.amount,
         totalUserPayment: this.totalYouPay,
         vouchers: this.generatedVouchers,
@@ -574,7 +575,7 @@ export default {
       }
 
       /* Perform Payment form submit */
-      this.formSubmit('https://www.bonusapp.com/test-purchase.php', data, 'post');
+      this.formSubmit('https://www.bonusapp.com/gc/transact.php?source=cron', data, 'post');
     },
     refreshPage() { // Without query parameters
       window.location = window.location.href.split("?")[0];
