@@ -601,7 +601,12 @@ export default {
               var hiddenField = document.createElement("input");
               hiddenField.setAttribute("type", "hidden");
               hiddenField.setAttribute("name", key);
-              hiddenField.setAttribute("value", params[key]);
+              if(typeof params[key] === "object") {
+                hiddenField.setAttribute("value", JSON.stringify(params[key]));
+              } else {
+                hiddenField.setAttribute("value", params[key]);
+              }
+              
               form.appendChild(hiddenField);
           }
       }
