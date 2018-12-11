@@ -438,20 +438,65 @@ export default {
         let _vchrs = this.storeDetails.vouchers;
         this.generateVoucher(null, 0, true); // Erase existing vouchers
         // Check how many multiple vouchers can make up for the amount
-        for (let i = 0; i < _vchrs.length; i++) {
-          if (_amt >= _vchrs[i].vAmount) {
-            let qty = Math.floor(_amt / _vchrs[i].vAmount);
-            if(qty) this.generateVoucher(_vchrs[i], qty);
-            _amt = _amt % _vchrs[i].vAmount;
-            if(_amt === 0) break;
-          } else continue;
-        }
+        let combos = this.successfulCombinations(_vchrs, _amt);
         // Remainder amount? ==> ERROR (not allowed)
-        if(_amt) {
-          this.giftCardDetails.amountError = true;
+        if(combos.length) {
           this.generateVoucher(null, 0, true); // Erase existing vouchers
-        } else this.giftCardDetails.amountError = false;
+          combos.forEach(v => {
+            console.log(v[0], );
+            this.generateVoucher({
+              vAmount: v[0],
+              sellingprice: v[4]
+            }, v[1])
+          });
+          this.giftCardDetails.amountError = false;
+        } else this.giftCardDetails.amountError = true;
       }
+    },
+    successfulCombinations(vchrs, amt) {
+        /* vchrs must be in descending order of vAmounts */
+        let cp = [ /* amt, qty, prev remndr, vchr-index, sprice */ ], q, r = amt;
+        let len = vchrs.length;
+        for(let i = 0; i < len;) {
+            let v = vchrs[i];
+            let isLast = (i === len - 1);
+            if(r >= v.vAmount) {
+                let _cpAmt = v.vAmount, _sp = v.sellingprice, _cpQty, _prevR = r;
+                q = Math.floor(r / v.vAmount);
+                r = r % v.vAmount;
+                _cpQty = q;
+                cp.push([_cpAmt, _cpQty, _prevR, i, _sp]);
+            }
+            if(isLast && r && cp.length) { // Empty cp check
+                let lastVS = (cp[cp.length - 1][3] === i);
+                let newValues = backtrack(lastVS);
+                i = newValues[0] || (i + 1);
+                r = newValues[1];
+            } else i++;
+        }
+
+        return cp;
+
+        /* Inner Functions: */
+        function backtrack(lastVoucherSelected) {
+            if(lastVoucherSelected) cp.length && cp.pop();
+            let lastCP = cp.length && cp.pop();
+            let new_i, new_r;
+            if(lastCP) {
+                if(lastCP[1] - 1) { // More than 1 unit
+                    cp.push([lastCP[0], lastCP[1] - 1, lastCP[2], lastCP[3], lastCP[4]]);
+                    new_i = lastCP[3];
+                    new_r = lastCP[2] - (lastCP[0] * (lastCP[1] - 1));
+                } else {
+                    new_i = lastCP[3] + 1;
+                    new_r = lastCP[2];
+                }
+            } else {
+                new_i = null;
+                new_r = r;
+            }
+            return [new_i, new_r];
+        }
     },
     generateVoucher(voucher, qty, eraseOld = false) {
       if(eraseOld) this.generatedVouchers = [];
