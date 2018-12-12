@@ -46,7 +46,7 @@
                     {{storeDetails.allowCustomVouchers ? 
                       `Enter an amount between ${storeDetails.range[0]} and ${storeDetails.range[1]}` 
                       : 
-                      'Amount must be a combination of voucher(s)'}}
+                      `Amount must be a combination of voucher(s) and not exceed ${convertToRupees(amountUpperBound)}`}}
                   </div>
                 </div>
                 <div class="gft-chckt__sctn__cntnue" 
@@ -225,6 +225,7 @@ export default {
   data() {
     return {
       amount: 0,
+      amountUpperBound: 50000,
       totalYouPay: 0,
       discountPercent: 0,
       discountAmount: 0,
@@ -329,7 +330,7 @@ export default {
     if(this.$route.query.status) this.displayPostSubmitStatus(this.$route.query.status);
     /* Fetch store info (API Call) */
     this.fetchStoreData();
-    /* Auto fill data on creation (useful if logged in): */ 
+    /* Auto fill data on creation (useful if logged in): */
     this.autofillData(this.profile);
   },
   watch: {
@@ -418,6 +419,12 @@ export default {
       }
     },
     checkAmountValidity() {
+      // Check upper bound: 
+      if(this.amountUpperBound < this.amount) {
+        this.generateVoucher(null, 0, true); // Erase existing vouchers
+        this.giftCardDetails.amountError = true;
+        return;
+      }
       // Custom vouchers allowed:
       if(this.storeDetails.allowCustomVouchers) {
         let minAmount = this.storeDetails.range[0];
@@ -466,11 +473,12 @@ export default {
                 r = r % v.vAmount;
                 _cpQty = q;
                 cp.push([_cpAmt, _cpQty, _prevR, i, _sp]);
+                console.log(`${JSON.stringify(cp)} > ${r} |`);
             }
             if(isLast && r && cp.length) { // Empty cp check
                 let lastVS = (cp[cp.length - 1][3] === i);
-                let newValues = backtrack(lastVS);
-                i = newValues[0] || (i + 1);
+                let newValues = backtrack(lastVS, i);
+                i = newValues[0];
                 r = newValues[1];
             } else i++;
         }
@@ -478,21 +486,20 @@ export default {
         return cp;
 
         /* Inner Functions: */
-        function backtrack(lastVoucherSelected) {
+        function backtrack(lastVoucherSelected, cur_i) {
             if(lastVoucherSelected) cp.length && cp.pop();
             let lastCP = cp.length && cp.pop();
             let new_i, new_r;
             if(lastCP) {
                 if(lastCP[1] - 1) { // More than 1 unit
                     cp.push([lastCP[0], lastCP[1] - 1, lastCP[2], lastCP[3], lastCP[4]]);
-                    new_i = lastCP[3];
                     new_r = lastCP[2] - (lastCP[0] * (lastCP[1] - 1));
                 } else {
-                    new_i = lastCP[3] + 1;
                     new_r = lastCP[2];
                 }
+                new_i = lastCP[3] + 1;
             } else {
-                new_i = null;
+                new_i = cur_i + 1;
                 new_r = r;
             }
             return [new_i, new_r];
