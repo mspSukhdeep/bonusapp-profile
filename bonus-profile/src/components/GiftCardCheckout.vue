@@ -447,10 +447,9 @@ export default {
         // Check how many multiple vouchers can make up for the amount
         let combos = this.successfulCombinations(_vchrs, _amt);
         // Remainder amount? ==> ERROR (not allowed)
-        if(combos.length) {
+        if(combos && combos.length) {
           this.generateVoucher(null, 0, true); // Erase existing vouchers
           combos.forEach(v => {
-            console.log(v[0], );
             this.generateVoucher({
               vAmount: v[0],
               sellingprice: v[4]
@@ -464,7 +463,15 @@ export default {
         /* vchrs must be in descending order of vAmounts */
         let cp = [ /* amt, qty, prev remndr, vchr-index, sprice */ ], q, r = amt;
         let len = vchrs.length;
+        let numIter = 0;
+        const maxIter = 2000;
         for(let i = 0; i < len;) {
+            /* If Algorithm is taking way too many iterations, a simple combo doesn't exist: terminate */
+            if(numIter > maxIter) {
+              console.log(numIter);
+              return null;
+            }
+            /* Find quotient and remainder at every point */
             let v = vchrs[i];
             let isLast = (i === len - 1);
             if(r >= v.vAmount) {
@@ -473,14 +480,15 @@ export default {
                 r = r % v.vAmount;
                 _cpQty = q;
                 cp.push([_cpAmt, _cpQty, _prevR, i, _sp]);
-                console.log(`${JSON.stringify(cp)} > ${r} |`);
             }
+            /* If remainder still exists on reaching last voucher: backtrack */
             if(isLast && r && cp.length) { // Empty cp check
                 let lastVS = (cp[cp.length - 1][3] === i);
                 let newValues = backtrack(lastVS, i);
                 i = newValues[0];
                 r = newValues[1];
             } else i++;
+            numIter++;
         }
 
         return cp;
@@ -895,7 +903,7 @@ export default {
         &:active,
         &.slctd {
           border: 1px solid @border-light-blue;
-          font-weight: @semi-bold;
+         /* font-weight: @semi-bold;*/
           background: lighten(@bg-light-blue, 35%)
         }
         &-wrpr {
@@ -1050,6 +1058,7 @@ export default {
               top: -5px;
               left: -5px;
               z-index: 0;
+              filter: brightness(70%);
             }
           }
 
