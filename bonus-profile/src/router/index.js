@@ -98,6 +98,16 @@ export default new Router({
         headered: true,
         disableLoginCheck: true
       }
+    },
+    {
+      path: "/orderstatus/gc/:orderid",
+      name: "GiftCardStatus",
+      props: true,
+      component: GiftCardCheckoutPage,
+      meta: {
+        headered: true,
+        disableLoginCheck: true
+      }
     }
   ]
 });

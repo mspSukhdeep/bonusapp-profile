@@ -283,28 +283,20 @@ export default {
         failure: {
           type: 'failure',
           header: 'Whoops! Something went wrong...',
-          contents: [
-            "Don't worry, it happens to all of us. We'll take a look into this",
-            "If you have been charged, the amount will be reversed to your original payment method."
-          ],
+          contents: [],
           buttonText: "Start Over"
         },
         success: {
           type: 'success',
           header: 'Woohoo! Your gift card is on its way...',
-          contents: [
-            "The gift card(s) have been emailed to receiver's email",
-            "Bonusapp Cashback will be credited to your account shortly"
-          ],
+          contents: [],
           buttonText: "Go Home",
           path: '/'
         },
         payment: {
           type: 'payment',
           header: 'Uh-oh! Something went wrong with your payment...',
-          contents: [
-            "There was an issue in processing your payment. If this problem persists, please contact support@bonusapp.in"
-          ],
+          contents: [],
           buttonText: "Start Over"
         }
       }
@@ -318,20 +310,25 @@ export default {
       return this.$store.state.profile;
     },
     messageLength() {
-      return this.senderReceiverDetails.message.length;
+      return this.senderReceiverDetails.message && this.senderReceiverDetails.message.length;
     },
     ascendingVoucherList() {
-      let _ascList = JSON.parse(JSON.stringify(this.storeDetails.vouchers));
-      return _ascList.sort((a, b) => a.vAmount > b.vAmount ? 1 : -1); // Display in ascending order of voucher amounts
+      if(this.storeDetails && this.storeDetails.vouchers) {
+        let _ascList = JSON.parse(JSON.stringify(this.storeDetails.vouchers));
+        return _ascList.sort((a, b) => a.vAmount > b.vAmount ? 1 : -1); // Display in ascending order of voucher amounts
+      } 
     }
   },
   created() {
     /* Determine status if sent: */ 
-    if(this.$route.query.status) this.displayPostSubmitStatus(this.$route.query.status);
-    /* Fetch store info (API Call) */
-    this.fetchStoreData();
-    /* Auto fill data on creation (useful if logged in): */
-    this.autofillData(this.profile);
+    if(this.$route.name === 'GiftCardStatus' || this.$route.path.includes('orderstatus'))
+      this.displayPostSubmitStatus(this.$route.params.orderid);
+    else {
+      /* Fetch store info (API Call) */
+      this.fetchStoreData();
+      /* Auto fill data on creation (useful if logged in): */
+      this.autofillData(this.profile);
+    }
   },
   watch: {
     amount(newVal, oldVal) {
@@ -358,11 +355,30 @@ export default {
       this.senderReceiverDetails.toEmail = (userProfile && userProfile.email) ? userProfile.email : '';
       this.senderReceiverDetails.fromName = (userProfile && userProfile.name) ? userProfile.name : '';
     },
-    displayPostSubmitStatus(status) {
-      if(status === 'success' || status === 'failure' || status === 'payment') {
-        this.postSubmitStatuses.selected = this.postSubmitStatuses[status];
-        this.postSubmitStatuses.display = true;
-      } else this.postSubmitStatuses.display = false;
+    displayPostSubmitStatus(orderid) {
+      let _that = this;
+      if(orderid) {
+        axios
+          .post('https://www.bonusapp.com/gc/api/order_details.php?source=cron', `orderid=${orderid}`)
+          .then(response => {
+            let _data = response.data;
+            let _msg = _data.message.split('\n');
+            _that.postSubmitStatuses[_data.status].contents.push(
+              ..._msg,
+              _data.status === 'success' ? 
+                `The giftcards were sent to ${_data.email}`
+                :
+                `The giftcards were meant for ${_data.email}`,
+              `For reference, please note order ID: ${_data.orderid}`
+            )
+            /* Display status */
+            _that.postSubmitStatuses.selected = _that.postSubmitStatuses[_data.status];
+            _that.postSubmitStatuses.display = true;
+          }).catch(e => {
+            _that.postSubmitStatuses.display = true;
+            throw "Unable to fetch details from API using 'orderid'";
+          });
+      }
     },
     convertToRupees(number) {
       let x = number.toString(); 
