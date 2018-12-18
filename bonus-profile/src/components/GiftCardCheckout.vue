@@ -44,9 +44,9 @@
                   <div class="gft-chckt__sctn__amt-err" v-show="giftCardDetails.amountError">
                     Invalid! 
                     {{storeDetails.allowCustomVouchers ? 
-                      `Enter an amount between ${storeDetails.range[0]} and ${storeDetails.range[1]}` 
+                      `Enter an amount between &#8377;${convertToRupees(storeDetails.range[0])} and &#8377;${convertToRupees(storeDetails.range[1])}` 
                       : 
-                      `Amount must be a combination of voucher(s) and not exceed ${convertToRupees(amountUpperBound)}`}}
+                      `Amount must be a combination of voucher(s) and not exceed &#8377;${convertToRupees(amountUpperBound)}`}}
                   </div>
                 </div>
                 <div class="gft-chckt__sctn__cntnue" 
@@ -382,9 +382,20 @@ export default {
         /* Sort vouchers into descending order of voucher amounts: */
         _data.vouchers.sort((a, b) => a.vAmount > b.vAmount ? -1 : 1);
         /* Calculate and append selling price for voucher based on amount */
-        _data.vouchers.forEach(function(v) {
-          v.sellingprice = v.vAmount - (v.vAmount * _data.voucherDiscountRate);
-        });
+        if(_data.vouchers.length)
+          _data.vouchers.forEach(function(v) {
+            v.sellingprice = v.vAmount - (v.vAmount * _data.voucherDiscountRate);
+          });
+        else {
+          let _defVouchers = [100, 200, 500, 1000, 2000, 5000];
+          _defVouchers.forEach(v => {
+            if(v >= _data.range[0] && v <= _data.range[1]) 
+              _data.vouchers.push({
+                vAmount: v,
+                sellingprice: v - (v * _data.voucherDiscountRate)
+              });
+          });
+        }
         /* After modifications, store response data as Store Details */
         this.storeDetails = _data;
       });
