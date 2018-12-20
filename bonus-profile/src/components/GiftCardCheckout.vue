@@ -4,7 +4,7 @@
 
       <!-- POST Purchase status Message -->
       <div class="gft-stts" 
-        v-show="postSubmitStatuses.display" 
+        v-if="postSubmitStatuses.display" 
         :class="{ 'gft-stts--success' : postSubmitStatuses.selected.type === 'success', 
                   'gft-stts--failure' : postSubmitStatuses.selected.type === 'failure',
                   'gft-stts--payment' : postSubmitStatuses.selected.type === 'payment' }">
@@ -18,7 +18,7 @@
       </div>
 
       <!-- Gift Checkout Layout -->
-      <div v-show="!postSubmitStatuses.display">
+      <div v-else-if="!postSubmitStatuses.display && postSubmitStatuses.display !== undefined">
         <div class="gft-chckt">
           <div class="gft-chckt__lft">
 
@@ -272,7 +272,7 @@ export default {
       showTnCModal: false,
       initialFormAutoFill: false, // IMP:: Fill form with appropriate profile data ONLY IN THE BEGINNING (during creation)!
       postSubmitStatuses: {
-        display: false,
+        display: undefined,
         selected: {
           type: '',
           header: '',
@@ -320,10 +320,12 @@ export default {
     }
   },
   created() {
-    /* Determine status if sent: */ 
+    /* Determine status if sent: & set giftcard display status to true */ 
     if(this.$route.name === 'GiftCardStatus' || this.$route.path.includes('orderstatus'))
       this.displayPostSubmitStatus(this.$route.params.orderid);
     else {
+      /* IMPORTANT: giftcard status display must be set to false (in order to show checkout widget) */
+      this.postSubmitStatuses.display = false;
       /* Fetch store info (API Call) */
       this.fetchStoreData();
       /* Auto fill data on creation (useful if logged in): */
@@ -1251,6 +1253,20 @@ export default {
 
     &-stts {
       min-height: 800px;
+
+      &__img {
+        width: 200px;
+        height: 200px;
+      }
+      &--failure &__img {
+        .image-2x('https://assets.mspcdn.net/msp-ui/giftcards/icons/giftcard-oops@2x.png', 200px);
+      }
+      &--success &__img {
+        .image-2x('https://assets.mspcdn.net/msp-ui/giftcards/icons/woohoo@2x.png', 200px);
+      }
+      &--payment &__img {
+        .image-2x('https://assets.mspcdn.net/msp-ui/giftcards/icons/payment-error@2x.png', 200px);
+      }
     }
 
     &-chckt {

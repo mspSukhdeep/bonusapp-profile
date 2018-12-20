@@ -25,68 +25,98 @@ export default new Router({
     {
       path: "/",
       name: "HomePage",
-      component: HomePage
+      component: HomePage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/passbook",
       name: "Passbook",
-      component: Passbook
+      component: Passbook,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/activity",
       name: "Activity",
-      component: ActivityHistory
+      component: ActivityHistory,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/redeem",
       name: "Redeem",
-      component: RedeemPage
+      component: RedeemPage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/refer",
       name: "Refer",
-      component: ReferPage
+      component: ReferPage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/claims",
       name: "Claims",
-      component: ClaimPage
+      component: ClaimPage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/edit",
       name: "EditProfile",
-      component: EditProfile
+      component: EditProfile,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/change-number",
       name: "ChangeNumber",
       component: ChangeNumber,
       meta: {
-        standAlone: true,
+        pageType: 'standAlone',
         disableCheck: true
       }
     },
     {
       path: "/contact",
       name: "Contact",
-      component: ContactPage
+      component: ContactPage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/how-it-works",
       name: "HowItWorks",
-      component: HowItWorks
+      component: HowItWorks,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/faq",
       name: "FAQPage",
-      component: FAQPage
+      component: FAQPage,
+      meta: {
+        pageType: 'default'
+      }
     },
     {
       path: "/blocked",
       name: "BlockedPage",
       component: BlockedPage,
       meta: {
-        standAlone: true
+        pageType: 'standAlone'
       }
     },
     {
@@ -95,7 +125,7 @@ export default new Router({
       props: true,
       component: GiftCardCheckoutPage,
       meta: {
-        headered: true,
+        pageType: 'headered',
         disableLoginCheck: true
       }
     },
@@ -105,7 +135,7 @@ export default new Router({
       props: true,
       component: GiftCardCheckoutPage,
       meta: {
-        headered: true,
+        pageType: 'headered',
         disableLoginCheck: true
       }
     }

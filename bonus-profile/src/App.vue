@@ -1,12 +1,12 @@
 <template>
 <div>
-  <router-view v-if="standAlone"></router-view>
-  <div v-else-if="headered">
+  <router-view v-if="pageType === 'standAlone'"></router-view>
+  <div v-else-if="pageType === 'headered'">
     <bonus-head>
     </bonus-head>
     <router-view></router-view>
   </div>
-  <div v-else>
+  <div v-else-if="pageType === 'default'">
     <bonus-head>
     </bonus-head>
     <div class="wrpr">
@@ -47,23 +47,20 @@ export default {
     BlockedPage
   },
   computed: {
-    desktop: function() {
+    desktop() {
       return this.$store.state.app.window.width > 1200;
     },
-    size: function() {
+    size() {
       return this.$store.state.app.window.width;
     },
-    isBlocked: function() {
+    isBlocked() {
       return this.$store.state.profile.user_status === "blocked";
     },
-    device: function() {
+    device() {
       return this.$store.state.app.device;
     },
-    standAlone: function(){
-      return this.$route.meta.standAlone;
-    },
-    headered: function(){
-      return this.$route.meta.headered;
+    pageType() {
+      return this.$route.meta.pageType;
     }
   },
   store,
