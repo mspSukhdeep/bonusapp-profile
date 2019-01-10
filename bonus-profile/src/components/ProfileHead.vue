@@ -1,50 +1,47 @@
 <template>
-    <div class="prfl__wrpr">
-        <div class="sctn prfl clearfix">
-            <div class="prfl__inr clearfix">
-                <div class="usr-wdgt clearfix">
-                    <div class="usr-wdgt__img-wrpr">
-                        <img class="usr-wdgt__img" :src="profile.image" onerror="this.onerror=null;this.src='https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png';">
-                          <span class="icn-bsns" @click="showNotification=!showNotification" v-if="profile.user_status==='business'">Business User</span>
-                    </div>
-                    <div class="usr-wdgt__info">
-                        <div class="usr-wdgt__name">{{profile.name || "Hi User!"}}
-                            <span class="bdg--pro" v-if="false">PRO</span>
-                        </div>
-                        <div class="usr-wdgt__eml">{{profile.email}}
-                            <span class="unvrfd" v-if="false"></span>
-                        </div>
-                        <div class="usr-wdgt__mob" v-if="profile.mobile">
-                            <span class="icn-mob"></span> {{profile.mobile}}
-                        </div>
-                    </div>
-                </div>
-                <div class="prfl__rght">
-                    <cashback-widget></cashback-widget>
-                </div>
+  <div class="prfl__wrpr">
+    <div class="sctn prfl clearfix">
+      <div class="prfl__inr clearfix">
+        <div class="usr-wdgt clearfix">
+          <div class="usr-wdgt__img-wrpr">
+            <img
+              class="usr-wdgt__img"
+              :src="profile.image"
+              onerror="this.onerror=null;this.src='https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png';"
+            >
+            <span
+              class="icn-bsns"
+              @click="showNotification=!showNotification"
+              v-if="profile.user_status==='business'"
+            >Business User</span>
+          </div>
+          <div class="usr-wdgt__info">
+            <div class="usr-wdgt__name">
+              {{profile.name || "Hi User!"}}
+              <span class="bdg--pro" v-if="false">PRO</span>
             </div>
+            <div class="usr-wdgt__eml">
+              {{profile.email}}
+              <span class="unvrfd" v-if="false"></span>
+            </div>
+            <div class="usr-wdgt__mob" v-if="profile.mobile">
+              <span class="icn-mob"></span>
+              {{profile.mobile}}
+            </div>
+          </div>
+        </div>
+        <div class="prfl__rght">
+          <cashback-widget></cashback-widget>
+        </div>
+      </div>
 
-        <div class="prfl__ntfctn prfl__ntfctn--expnd" :class="{'':notificationExpanded}" v-if="profile.user_status==='business' && showNotification">
-            This account is now labeled as <strong>Business Account</strong>. The following stores are not eligible for Bonusapp cashback due to respective store policy towards bulk transactions:
-            <div class="prfl__ntfctn-sctn">
-              <span class="prfl__ntfctn-item">
-                {{bulkStores.join(", ")}}
-              </span>
-            </div>
-            <div class="prfl__ntfctn-btn-wrpr">
-              <div class="btn btn--s prfl__ntfctn-btn" @click="userAgree">
-                I understand
-              </div>
-            </div>
-            <div class="prfl__ntfctn-more" v-if="!notificationExpanded">
-              <span class="prfl__ntfctn-more-txt" @click="notificationExpanded = true">
-                Read More
-              </span>
-              
-            </div>
-        </div>
-        </div>
+      <div class="prfl__ntfctn prfl__ntfctn--expnd">
+        <h2 class="prfl__ntfctn__ttl">Bonusapp is shutting down</h2>
+        <p>Today we're announcing that after two years of helping people save money and earn extra cashback, we will be shutting down on Feb 15. We're proud of the community that rallied around Bonusapp.</p>
+        <p>We want to make this transition as smooth as possible for everyone who uses Bonusapp. If you have cashback in your active account, your cashback will be available for redemption until Feb 15, 2019.</p>
+      </div>
     </div>
+  </div>
 </template>
 
 
@@ -75,13 +72,13 @@ export default {
         "Hotels.com"
       ],
       notificationExpanded: true,
-      showNotification: !localStorage.getItem('business_agree')
+      showNotification: !localStorage.getItem("business_agree")
     };
   },
   methods: {
-    userAgree: function(){
-      this.showNotification  = false;
-      localStorage.setItem('business_agree', true)
+    userAgree: function() {
+      this.showNotification = false;
+      localStorage.setItem("business_agree", true);
     }
   }
 };
@@ -110,14 +107,21 @@ export default {
     border: 1px solid rgba(245, 166, 35, 0.2);
     overflow: hidden;
     height: 50px;
-    &-btn{
+    p + p{
+      margin-top: 10px;
+    }
+    &__ttl {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    &-btn {
       padding: 8px 15px !important;
-      &-wrpr{
+      &-wrpr {
         text-align: right;
         margin-top: 10px;
       }
     }
-    &--expnd{
+    &--expnd {
       height: auto;
     }
     &-more {
@@ -128,7 +132,7 @@ export default {
       bottom: 0;
       left: 0;
       background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
-      &-txt{
+      &-txt {
         position: absolute;
         right: 10px;
         bottom: 5px;
@@ -168,7 +172,10 @@ export default {
       content: "";
       width: 100%;
       height: 100%;
-      .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/shell/desktop_profile.png', 100%);
+      .image-2x(
+        "https://assets.mspcdn.net/f_auto/bonus_in/shell/desktop_profile.png",
+        100%
+      );
       background-position: center center;
     }
   }
@@ -201,7 +208,10 @@ export default {
 }
 
 .unvrfd {
-  .image-2x('https://assets.mspcdn.net/f_auto/bonus_in/icon/error-grey.png', 15px);
+  .image-2x(
+    "https://assets.mspcdn.net/f_auto/bonus_in/icon/error-grey.png",
+    15px
+  );
   width: 15px;
   height: 15px;
   display: inline-block;
@@ -237,15 +247,15 @@ export default {
 
 @media screen and (max-width: @breakpoint) {
   .prfl {
-    &__ntfctn{
-      &-item{
+    &__ntfctn {
+      &-item {
         margin-right: 15px;
-        & + &{
+        & + & {
           margin: 0 15px 0 0;
         }
       }
-      &-btn{
-        &-wrpr{
+      &-btn {
+        &-wrpr {
           text-align: center;
         }
       }

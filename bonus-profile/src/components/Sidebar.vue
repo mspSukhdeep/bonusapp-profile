@@ -76,28 +76,8 @@ export default {
                     icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/profile.png'
                 },
                 {
-                    link: '/refer',
-                    label: 'Refer your friends',
-                    icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/refer.png'
-                },
-                {
-                    link: '/claims',
-                    label: 'Claims & Issues',
-                    icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/flag.png'
-                },
-                {
-                    link: '/how-it-works',
-                    label: 'How it Works',
-                    icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/info.png'
-                },
-                {
-                    link: '/faq',
-                    label: 'FAQs',
-                    icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/help.png'
-                },
-                {
                     link: '/contact',
-                    label: 'Contact Us',
+                    label: 'Contact us for any Issues',
                     icon: 'https://assets.mspcdn.net/f_auto/bonus_in/icon/email.png'
                 }
             ]

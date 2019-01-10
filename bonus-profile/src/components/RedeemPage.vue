@@ -107,8 +107,7 @@
                 <div class="rdm-item__img-wrpr">
                     <img class="rdm-item__img" :src="option.icon">
                 </div>
-                <div class="rdm-item__txt">
-                    {{option.label}}
+                <div class="rdm-item__txt" v-html="option.label">
                 </div>
             </div>
         </div>
@@ -161,7 +160,7 @@ export default {
     },
     arrowPosition: function() {
       let options = this.redeemOptions,
-        positions = [101, 328, 555],
+        positions = [156, 497],
         index;
 
       for (let i = 0; i < options.length; i++) {
@@ -177,7 +176,7 @@ export default {
     return {
       redeemOptions: [
         {
-          label: "Transfer Cashback to Bank Account",
+          label: "Transfer Cashback to Bank Account <br />(can take upto 3 working days)",
           type: "bank",
           icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/bank.png"
         },
@@ -185,11 +184,6 @@ export default {
           label: "Transfer Cashback to Paytm Account",
           type: "paytm",
           icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/paytm.png"
-        },
-        {
-          label: "Redeem Amazon Gift Card",
-          type: "amazon",
-          icon: "https://assets.mspcdn.net/f_auto/bonus_in/icon/amazon.png"
         }
       ],
       slabOptions: {
@@ -386,7 +380,7 @@ export default {
     margin-top: 20px;
   }
   &-item {
-    width: 33.3%;
+    width: 50%;
     float: left;
     cursor: pointer;
     border-radius: 3px;
@@ -694,6 +688,11 @@ export default {
       &-wrpr {
         background-color: @color-white;
         box-shadow: @box-shadow-2;
+      }
+      &:first-child{
+        .rdm-item__img{
+          margin-top: 12px
+        }
       }
     }
   }
