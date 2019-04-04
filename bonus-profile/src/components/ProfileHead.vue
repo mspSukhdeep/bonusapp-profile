@@ -9,11 +9,6 @@
               :src="profile.image"
               onerror="this.onerror=null;this.src='https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png';"
             >
-            <span
-              class="icn-bsns"
-              @click="showNotification=!showNotification"
-              v-if="profile.user_status==='business'"
-            >Business User</span>
           </div>
           <div class="usr-wdgt__info">
             <div class="usr-wdgt__name">
@@ -34,12 +29,6 @@
           <cashback-widget></cashback-widget>
         </div>
       </div>
-
-      <div class="prfl__ntfctn prfl__ntfctn--expnd">
-        <h2 class="prfl__ntfctn__ttl">Bonusapp is shutting down</h2>
-        <p>Today we're announcing that after two years of helping people save money and earn extra cashback, we will be shutting down on Feb 15. We're proud of the community that rallied around Bonusapp.</p>
-        <p>We want to make this transition as smooth as possible for everyone who uses Bonusapp. If you have cashback in your active account, your cashback will be available for redemption until Feb 15, 2019.</p>
-      </div>
     </div>
   </div>
 </template>
@@ -47,6 +36,8 @@
 
 <script>
 import CashbackWidget from "./CashbackWidget";
+import Axios from "axios";
+import UTILS from "../utils";
 
 export default {
   name: "ProfileHead",
@@ -60,25 +51,63 @@ export default {
   },
   data: function() {
     return {
-      bulkStores: [
-        "Amazon",
-        "Flipkart",
-        "Koovs",
-        "AJIO",
-        "LimeRoad",
-        "MyVishal",
-        "Reliance Trends",
-        "Booking.com",
-        "Hotels.com"
-      ],
-      notificationExpanded: true,
-      showNotification: !localStorage.getItem("business_agree")
+      google: {
+        OAUTHURL: "https://accounts.google.com/o/oauth2/auth?",
+        SCOPE:
+          "https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.readonly",
+        CLIENTID:
+          "682606172338-jjvdidkgb4g69gg2psp8nokub5of8vrm.apps.googleusercontent.com",
+        REDIRECT: "https://www.bonusapp.in/me/gmail_redirect.php",
+        REDIRECT2: "https://www.bonusapp.com/me/gmail_redirect.php",
+        TYPE: "code",
+        code: null,
+        granted: UTILS.cookie.get("gmail_access")
+      }
     };
   },
   methods: {
-    userAgree: function() {
-      this.showNotification = false;
-      localStorage.setItem("business_agree", true);
+    linkGmail: function() {
+      this.googlePlusLogin();
+    },
+    googlePlusLogin: function() {
+      let _url =
+        this.google.OAUTHURL +
+        "scope=" +
+        this.google.SCOPE +
+        "&client_id=" +
+        this.google.CLIENTID +
+        "&redirect_uri=" +
+        this.google.REDIRECT +
+        "&access_type=offline&response_type=" +
+        this.google.TYPE;
+
+      let win = window.open(_url, "_blank");
+      win.focus();
+      var pollTimer = window.setInterval(()=> {
+
+        try {
+          var url = win.document.URL;
+          console.log(url);
+          if (url.indexOf(this.google.REDIRECT2) != -1) {
+            window.clearInterval(pollTimer);
+            let urlObj = new URL(url);
+            this.google.code = UTILS.queryString(urlObj.search).code;
+            win.close();
+            console.log(this.google.code);
+            if (this.google.code) this.postGmailData(this.google.code);
+            else {
+              //
+              console.log("Error Occurred");
+            }
+          }
+        } catch (e) {}
+      }, 500);
+    },
+    postGmailData: function(code) {
+      let _URL = "/me/gmail_api.php?code=" + code;
+      Axios.get(_URL).then(response => {});
+      this.google.granted = true;
+      UTILS.cookie.get("gmail_access", true, 365);
     }
   }
 };
@@ -107,7 +136,8 @@ export default {
     border: 1px solid rgba(245, 166, 35, 0.2);
     overflow: hidden;
     height: 50px;
-    p + p{
+
+    p + p {
       margin-top: 10px;
     }
     &__ttl {
@@ -116,6 +146,8 @@ export default {
     }
     &-btn {
       padding: 8px 15px !important;
+      margin-top: 10px;
+
       &-wrpr {
         text-align: right;
         margin-top: 10px;

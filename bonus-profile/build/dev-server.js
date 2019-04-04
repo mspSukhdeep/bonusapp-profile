@@ -31,7 +31,7 @@ const devMiddleware = require('webpack-dev-middleware')(compiler, {
 })
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  path: '/me/__webpack_hmr',
+  path: '/__webpack_hmr',
   reload: true,
   log: false
 })
@@ -58,7 +58,7 @@ Object.keys(proxyTable).forEach(function (context) {
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')({
-  index: '/me/index.html'
+  index: '/user/index.html'
 }))
 
 // serve webpack bundle output

@@ -65,7 +65,7 @@ let UTILS = {
         withCredentials: true
       })
       .then(response => {
-        if (window.location.href.indexOf("/me/") > -1) {
+        if (window.location.href.indexOf("/user/") > -1) {
           window.location.href = "/";
         }
       });

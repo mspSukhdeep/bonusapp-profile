@@ -78,11 +78,6 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },
-  mounted() {
-    if(window.location.pathname.indexOf("change-number")===-1 && window.location.pathname.indexOf("/checkout/")===-1){
-      this.$store.dispatch("fetchProfile", {});
-    }
-  },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 const HomePage = () => import("../components/HomePage"),
+      LoginPage = () => import("../components/LoginPage"),
       Passbook = () => import("../components/Passbook"),
       ActivityHistory = () => import("../components/ActivityHistory"),
       RedeemPage = () => import("../components/RedeemPage"),
@@ -13,21 +14,37 @@ const HomePage = () => import("../components/HomePage"),
       HowItWorks = () => import("../components/HowItWorks"),
       FAQPage = () => import("../components/FAQ"),
       BlockedPage = () => import("../components/BlockedPage"),
-      GiftCardCheckoutPage = () => import("../components/GiftCardCheckout");
+      GiftCardCheckoutPage = () => import("../components/GiftCardCheckout"),
+      RedirectPage = () => import ("../components/RedirectPage");
 
 
 Vue.use(Router);
 
 export default new Router({
-  base: "/me/",
-  mode: "history",
+  base: "/home/",
   routes: [
     {
       path: "/",
       name: "HomePage",
       component: HomePage,
       meta: {
-        pageType: 'default'
+        pageType: 'headered'
+      }
+    },
+    {
+      path: "/redirect",
+      name: "RedirectPage",
+      component: RedirectPage,
+      meta: {
+        pageType: 'headered'
+      }
+    },
+    {
+      path: "/login",
+      name: "LoginPage",
+      component: LoginPage,
+      meta: {
+        pageType: 'headered'
       }
     },
     {

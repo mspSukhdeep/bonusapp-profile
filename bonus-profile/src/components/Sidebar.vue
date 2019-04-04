@@ -25,15 +25,6 @@
                 </div>
             </button>
         </router-link>
-        <a>
-        <button class="list-item ripple ripple--l list-item--lgt" @click="logout" v-if="showLogout">
-                <div class="list-item__info">
-                    <div class="list-item__txt">
-                        Logout
-                    </div>
-                </div>
-        </button>
-        </a>
     </div>
 </div>
 </template>

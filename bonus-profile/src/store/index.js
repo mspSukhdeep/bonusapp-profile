@@ -3,6 +3,8 @@ import Veux from 'vuex';
 import Axios from 'axios';
 import UTILS from '../utils';
 
+import router from '../router'
+
 Vue.use(Veux);
 
 const API = Axios.create({
@@ -37,8 +39,16 @@ export default new Veux.Store({
         claimHistory: []
     },
     mutations: {
+        updateProfileData(state, payload) {
+            state.profile = {
+                email: payload.email,
+                name: payload.name,
+                image: payload.picture
+            }
+            router.push('/passbook');
+        },
         updatePassbook(state, payload) {
-            state.passbook = payload.map(item=>{
+            state.passbook = payload?payload.map(item=>{
                 if(item.info.store){
                     item.label = item.info.store;
                     delete item.info.store;
@@ -53,7 +63,7 @@ export default new Veux.Store({
                 }
                 item.status==="valid" && (item.status = "pending");
                 return item;
-            });
+            }):[];
         },
         updateProfile(state, payload){
             if(!payload.data || !payload.data.email){
@@ -154,6 +164,25 @@ export default new Veux.Store({
                     }
                 })
             });
-        }
+        },
+        saveOAuthToken(context, payload = {}) {
+            return new Promise((resolve, reject) => {
+              let _URL = "https://dealsfinder.in/track/api/token.php?code="+payload.code;
+              Axios.get(_URL).then(
+                response => {
+                  if (response.status === 200) {
+                    console.log(response.data);
+                    if(response.data){
+                      context.commit("updateProfileData", response.data);
+                    }
+                    resolve();
+                  } else {
+                    //Log some errors here
+                    reject();
+                  }
+                }
+              );
+            });
+          }
     },
 });

@@ -4,22 +4,6 @@
         <a href="/">
           <img src="https://assets.mspcdn.net/f_auto/bonus_in/logo/large/bonus_white.png" class="hdr__logo" />
         </a>
-        <div @click="loginCheckRedirect">
-          <div class="hdr-link clearfix">
-            <img class="hdr-link__img" :src="profile.image || 'https://assets.mspcdn.net/f_auto/bonus_in/icon/user.png'" />
-            <div class="hdr-link__info" v-display="'desktop'">
-                <div class="hdr-link__main">
-                  Your Account
-                </div>
-                <div class="hdr-link__eml" v-if="profile.email">
-                    {{profile.email}}
-                </div>
-                <div class="hdr-link__eml" v-else>
-                    Login/Signup
-                </div>
-            </div>
-          </div>
-        </div>
         <div class="hdr__cb" v-if="profile.email">
             {{coins}}
         </div>
@@ -42,25 +26,10 @@ export default {
       return this.$store.state.profile;
     }
   },
-  methods: {
-    loginCheckRedirect: function(){
-      if(!UTILS.cookie.get("msp_login")){
-        let params = "?utm_source=bonusapp&desturl=" + encodeURIComponent(window.location.href);
-        UTILS.login("login", params);
-      }
-      else{
-        this.$router.push('/');
-        this.$store.dispatch("fetchProfile", {});
-      }
-    }
-  },
   created(){
-    if(window.location.pathname.indexOf("/checkout/")>-1){
-      let params = {
-        disableLoginCheck: true
-      }
-      this.$store.dispatch("fetchProfile", params);
-    }
+    // if(this.profile.isLocal){
+    //   this.$router.push('/login');
+    // }
   }
 };
 </script>

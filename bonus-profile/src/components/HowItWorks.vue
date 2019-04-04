@@ -4,7 +4,7 @@
             <div class="hiw__ttl hiw__ttl--clr">
                 Earn Cashback in Just 3 Simple Steps
             </div>
-            <div class="clearfix">
+            <div class="clearfix hiw__stps-item-wrpr">
                 <div class="hiw__stps-item">
                     <div class="hiw__stps-icon">
                         <img src="https://assets.mspcdn.net/msp-ui/icons/login-works@2x.png">
@@ -49,15 +49,15 @@
                     </div>
                 </div>
             </div>
-            <a class="btn" href="/">
+            <router-link to="/login" class="btn">
                 Get Started
-            </a>
+            </router-link>
         </div>
         <div class="hiw__sctn" align="center">
             <div class="hiw__ttl">
                 3 Easy Options to Redeem Cashback
             </div>
-            <div class="clearfix">
+            <div class="clearfix flex">
                 <div class="hiw__stps-item hiw__stps-item--4">
                     <img class="hiw__rdm-icon" src="https://assets.mspcdn.net/msp-ui/icons/bank_transfer_redeem@2x.png">
                     <div class="hiw__stps-sub">
@@ -82,15 +82,13 @@
             <div class="hiw__ttl hiw__ttl--clr">
                 Top Cashback Stores
             </div>
-            <a href="/">
-<img src="https://assets.mspcdn.net/msp-ui/banners/15nov_cashback_page_banner.png" width="100%">
-</a>
+            <img src="https://assets.mspcdn.net/msp-ui/banners/15nov_cashback_page_banner.png" width="100%">
         </div>
         <div class="hiw__sctn" align="center">
             <div class="hiw__ttl">
                 What Our Users Say About Us
             </div>
-            <div class="clearfix">
+            <div class="clearfix flex">
                 <div class="hiw__rvws-item">
                     <img src="http://www.mycustomer.com/sites/all/themes/pp/img/default-user.png" class="hiw__rvws-img">
                     <div class="hiw__rvws-usr">
@@ -131,20 +129,7 @@
                         I always check BonusApp before I make an online purchase. Great customer support. I love the cash back!
                     </div>
                 </div>
-                <div class="hiw__rvws-item">
-                    <img src="http://www.mycustomer.com/sites/all/themes/pp/img/default-user.png" class="hiw__rvws-img">
-                    <div class="hiw__rvws-usr clearfix">
-                        <div class="hiw__rvws-usr-name">
-                            Tanya Dixit
-                        </div>
-                        <div class="rtng-star">
-                            <div class="rtng-star__inr" style="width: 95% "></div>
-                        </div>
-                    </div>
-                    <div class="hiw__rvws-txt">
-                        Have used BonusApp Cashback for quite some transactions till now. It has tracked most of my transactions successfully. Well done BonusApp!
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div class="hiw__sctn">
@@ -166,7 +151,7 @@
             <div class="hiw__ttl hiw__ttl--clr">
                 Highlights of our Cashback Programme
             </div>
-            <div class="hiw__stps-cntnr clearfix">
+            <div class="hiw__stps-cntnr flex clearfix">
                 <div class="hiw__stps-item hiw__stps-item--4">
                     <div class="hiw__stps-icon">
                         <img src="https://assets.mspcdn.net/msp-ui/icons/plus_stores@2x.png">
@@ -268,9 +253,10 @@ export default {
   }
   &__stps {
     &-item {
-      float: left;
-      width: 195px;
-      margin: 0 16px;
+    flex-grow: 1;
+      &-wrpr{
+          display: flex;
+      }
     }
     &-icon {
       height: 24px;
@@ -301,7 +287,7 @@ export default {
       text-transform: uppercase;
     }
     &-dscrptn {
-      margin: 10px 0 40px;
+      margin: 10px 20px 40px;
       font-size: 14px;
       color: #444;
       line-height: 22px;
@@ -329,7 +315,7 @@ export default {
     }
     &-usr {
       margin-left: 15px;
-      width: 235px;
+      width: 180px;
       float: left;
       &-name {
         text-align: left;
@@ -345,8 +331,6 @@ export default {
       border-radius: 21px;
     }
     &-item {
-      width: 293px;
-      float: left;
       padding: 15px;
       margin: 8px;
       border-radius: 3px;
@@ -388,5 +372,9 @@ export default {
         }
     }
 }
+}
+
+.flex{
+    display: flex
 }
 </style>

@@ -1,26 +1,20 @@
 <template>
-    <div>
-        <div v-display="'desktop'">
-            <passbook></passbook>
-        </div>
-        <div v-display="'mobile'">
-            <profile-head></profile-head>
-            <sidebar></sidebar>
-        </div>
-    </div> 
+  <div>
+  <div class="wrpr">
+    <how-it-works></how-it-works>
+  </div>
+  <Footer></Footer>
+  </div>
 </template>
 <script>
-import Passbook from './Passbook';
-import ProfileHead from "./ProfileHead";
-import Sidebar from "./Sidebar";
-
+import HowItWorks from "./HowItWorks";
+import Footer from "./Footer";
 
 export default {
   name: "HomePage",
   components: {
-      Passbook,
-      ProfileHead,
-      Sidebar
-  },
+    HowItWorks,
+    Footer
+  }
 };
 </script>
